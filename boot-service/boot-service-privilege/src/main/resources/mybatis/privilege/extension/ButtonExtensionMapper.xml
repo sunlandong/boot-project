@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.boot.service.privilege.dao.base.ButtonMapper">
+  
+  <select id="listWithSearch" parameterType="map" resultMap="BaseResultMap">
+  	select * from t_sys_button where 1=1 
+  		and
+			(
+				"NAME" LIKE CONCAT(CONCAT('%', #{name}),'%')
+				 or 
+				"QX_NAME" LIKE CONCAT(CONCAT('%', #{qxName}),'%') 
+			)
+  </select>
+  
+</mapper>

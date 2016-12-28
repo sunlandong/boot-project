@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans        
+						http://www.springframework.org/schema/beans/spring-beans.xsd        
+						http://code.alibabatech.com/schema/dubbo        
+						http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 实例化服务层以及dubbo通过接口发布服务 -->
+	<dubbo:application name="boot-web-activiti" />
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<!-- 多注册中心配置，竖号分隔表示同时连接多个不同注册中心，同一注册中心的多个集群地址用逗号分隔 -->
+	<!-- 注册中心地址 -->
+	<dubbo:registry protocol="zookeeper" address="zookeeper://localhost:2181" />
+	
+	<dubbo:reference id="activitiService" interface="org.boot.facede.activiti.service.ActivitiService" check="false"/>
+</beans>

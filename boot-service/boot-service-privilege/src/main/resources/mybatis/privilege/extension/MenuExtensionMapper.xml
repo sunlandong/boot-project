@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.boot.service.privilege.dao.base.MenuMapper">
+  
+  <select id="listAllMenu" parameterType="java.lang.Long" resultType="org.boot.facede.privilege.model.Menu">
+  
+  	select
+
+	 t.*
+	  from t_sys_menu t
+	
+	 start with
+	
+	 t.parentid =0
+	
+	connect
+	
+	by prior t.menuid = t.parentid
+  </select>
+  <select id="getMaxId" resultType="long">
+  	select max(MENUID+1) from t_sys_menu
+  </select>
+</mapper>

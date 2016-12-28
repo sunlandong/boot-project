@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.boot.service.privilege.dao.base.RoleButtonMapper">
+  
+  <select id="listAllBrAndQxname" parameterType="java.lang.String" resultType="java.lang.String">
+  
+  	select b.qx_name
+	  from t_sys_role_button a
+	  left join t_sys_button b
+	    on a.buttonid = b.buttonid
+	 where a.roleid = #{roleid}
+
+  </select>
+</mapper>
