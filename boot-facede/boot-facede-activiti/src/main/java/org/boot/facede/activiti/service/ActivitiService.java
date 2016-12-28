@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -13,7 +12,6 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.boot.facede.activiti.model.Application;
 import org.boot.facede.activiti.model.ApproveInfo;
-import org.boot.facede.activiti.model.TaskView;
 import org.boot.facede.activiti.model.Template;
 
 public interface ActivitiService {

@@ -28,6 +28,12 @@ public class ActivitiController {
 	@Autowired
 	ActivitiService activitiService;
 	
+	/**
+	 * 部署流程
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/deploy",method=RequestMethod.PUT)
 	@ResponseBody
 	public ErrorInfo<String> deploy(HttpServletRequest request)throws Exception{
@@ -35,12 +41,23 @@ public class ActivitiController {
 		return ResultUtils.createSuccess("ok");
 	}
 	
+	/**
+	 * 获取所有的最新版本的流程
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/getAllLastDeployment",method=RequestMethod.GET)
 	@ResponseBody
 	public List<Map<String,Object>> getAllLastDeployment() throws Exception{
 		return activitiService.getAllLastDeployment();
 	}
 	
+	/**
+	 * 根据流程定义KEY删除流程定义
+	 * @param pdKey
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/deleteDeploymentByPDKey/{pdKey}",method=RequestMethod.DELETE)
 	@ResponseBody
 	public ErrorInfo<String> deleteDeploymentByPDKey(@PathVariable("pdKey")String pdKey) throws Exception{
@@ -48,6 +65,12 @@ public class ActivitiController {
 		return ResultUtils.createSuccess("ok");
 	}
 	
+	/**
+	 * 部署数据模板
+	 * @param template
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/deployTemplate", method=RequestMethod.POST)
 	@ResponseBody
 	public List<Template> deployTemplate(@RequestBody Template template) throws Exception {
@@ -57,6 +80,12 @@ public class ActivitiController {
 		return activitiService.findAllTemplate();
 	}
 	
+	/**
+	 * 根据模板ID删除数据模板
+	 * @param templateId
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/deleteTemplate/{templateId}", method=RequestMethod.DELETE)
 	@ResponseBody
 	public ErrorInfo<String> deleteTemplate(@PathVariable("templateId")String templateId) throws Exception{
@@ -65,12 +94,23 @@ public class ActivitiController {
 		return ResultUtils.createSuccess("ok");
 	}
 	
+	/**
+	 * 获取所有的数据模板
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/findAllTemplate", method=RequestMethod.GET)
 	@ResponseBody
 	public List<Template> findAllTemplate() throws Exception{
 		return activitiService.findAllTemplate();
 	}
 	
+	/**
+	 * 提交申请
+	 * @param application
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/submitApplication", method=RequestMethod.POST)
 	@ResponseBody
 	public ErrorInfo<String> submitApplication(@RequestBody Application application) throws Exception{
@@ -83,6 +123,12 @@ public class ActivitiController {
 		return ResultUtils.createSuccess("ok");
 	}
 	
+	/**
+	 * 根据用户ID获取登录用户的流程申请
+	 * @param status
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/findApplication", method=RequestMethod.GET)
 	@ResponseBody
 	public List<Application> findApplication(String status) throws Exception{
@@ -91,6 +137,12 @@ public class ActivitiController {
 		return activitiService.findApplicationByUserId(userId);
 	}
 	
+	/**
+	 * 根据申请ID获取审批信息列表
+	 * @param applicationId
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/findApproveInfo/{applicationId}", method=RequestMethod.GET)
 	@ResponseBody
 	public List<ApproveInfo> findApproveInfo(@PathVariable("applicationId")String applicationId) throws Exception{
@@ -98,6 +150,11 @@ public class ActivitiController {
 		return activitiService.findApproveInfoByApplicationId(applicationId);
 	}
 	
+	/**
+	 * 根据登录用户ID获取用户待办事项
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/findTaskView", method=RequestMethod.GET)
 	@ResponseBody
 	public List<Map<String,Object>> findTaskView() throws Exception{
@@ -106,6 +163,12 @@ public class ActivitiController {
 		return activitiService.findTaskViewByUserId(userId);
 	}
 	
+	/**
+	 * 审批待办任务
+	 * @param approveInfoVo
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/approve", method=RequestMethod.POST)
 	@ResponseBody
 	public ErrorInfo<String> approve(@RequestBody ApproveInfoVo approveInfoVo) throws Exception{
@@ -115,7 +178,4 @@ public class ActivitiController {
 		activitiService.approve(approveInfo, approveInfoVo.getTaskId());
 		return ResultUtils.createSuccess("ok");
 	}
-	
-	
-
 }
