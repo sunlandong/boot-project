@@ -133,7 +133,7 @@ public interface ActivitiService {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<TaskView> findTaskViewByUserId(String userId) throws Exception;
+	public List<Map<String,Object>> findTaskViewByUserId(String userId) throws Exception;
 	/**
 	 * 审批处理
 	 */

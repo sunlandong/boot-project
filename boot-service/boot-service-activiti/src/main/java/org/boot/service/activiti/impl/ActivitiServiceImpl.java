@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,6 @@ import org.boot.facede.activiti.model.Application;
 import org.boot.facede.activiti.model.ApplicationCriteria;
 import org.boot.facede.activiti.model.ApproveInfo;
 import org.boot.facede.activiti.model.ApproveInfoCriteria;
-import org.boot.facede.activiti.model.TaskView;
 import org.boot.facede.activiti.model.Template;
 import org.boot.facede.activiti.service.ActivitiService;
 import org.boot.service.activiti.dao.base.ApplicationMapper;
@@ -141,10 +141,13 @@ public class ActivitiServiceImpl implements ActivitiService {
 	@Override
 	public void submitApplication(Application application) throws Exception {
 		application.setVcStatus(ApproveStatus.STATUS_APPROVING);
+		//application.setVcName("测试申请名称");
+		application.setDtCtime(new Date());
 		applicationMapper.insertSelective(application);
 		Template template = templateMapper.selectByPrimaryKey(application.getVcTemplateId());
 		Map<String, Object> variables = new HashMap<String, Object>();
 		variables.put("application", application);
+		variables.put("userId", application.getVcUserId());
 		ProcessInstance pi = runtimeService.startProcessInstanceByKey(template.getVcPdkey(), application.getVcId(), variables);
 		//提交后办理第一个任务
 		Task task = taskService.createTaskQuery()
@@ -291,24 +294,26 @@ public class ActivitiServiceImpl implements ActivitiService {
 		ApproveInfoCriteria approveInfoCriteria = new ApproveInfoCriteria();
 		approveInfoCriteria.createCriteria().andVcApplicationIdEqualTo(applicationId);
 		approveInfoCriteria.setOrderByClause("DT_CTIME_ DESC");
-		return approveInfoMapper.selectByExample(approveInfoCriteria);
+		List<ApproveInfo> approveInfos = approveInfoMapper.selectByExampleWithBLOBs(approveInfoCriteria);
+		return approveInfos;
 	}
 
 	@Override
-	public List<TaskView> findTaskViewByUserId(String userId) throws Exception {
+	public List<Map<String,Object>> findTaskViewByUserId(String userId) throws Exception {
 		List<Task> tasks = taskService
 		.createTaskQuery()
 		.taskAssignee(userId)
 		.orderByTaskCreateTime()
 		.desc()
 		.list();
-		List<TaskView> list = new ArrayList<TaskView>();
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		Map<String,Object> obj = new HashMap<String,Object>();
 		for (Task task : tasks) {
-			String taskId = task.getId();
+			obj.put("taskId", task.getId());
 			Application application = (Application) taskService
-					.getVariable(taskId, "application");
-			TaskView taskView = new TaskView(task, application);
-			list.add(taskView);
+					.getVariable(task.getId(), "application");
+			obj.put("application", application);
+			list.add(obj);
 		}
 		return list;
 	}
@@ -324,16 +329,15 @@ public class ActivitiServiceImpl implements ActivitiService {
 				.singleResult();
 		// 获得流程实例id
 		String processInstanceId = task.getProcessInstanceId();
-		// 1、保存审批实体
-		approveInfoMapper.insertSelective(approveInfo);// 持久对象
-		// 2、办理当前的任务
+		// 保存审批信息实体
+		approveInfoMapper.insertSelective(approveInfo);
+		// 办理当前的任务
 		taskService.complete(taskId);
 
 		// 查询当前的流程实例是否存在
 		ProcessInstance processInstance = runtimeService
 				.createProcessInstanceQuery()
 				.processInstanceId(processInstanceId).singleResult();
-
 //		Application application = approveInfo.getApplication();// 持久对象
 
 //		if (ai.getApproval()) {// 3、如果审批的结果为“通过”

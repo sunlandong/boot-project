@@ -1,13 +1,18 @@
 package org.boot.facede.activiti.model;
 
+import java.io.Serializable;
+
 import org.activiti.engine.task.Task;
 
 /**
  * 包装任务信息和申请信息
- * @author zhaoqx
  *
  */
-public class TaskView {
+public class TaskView implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1224274773739494709L;
 	private Task task;
 	private Application application;
 	
