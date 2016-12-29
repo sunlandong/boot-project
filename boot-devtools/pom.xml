@@ -59,6 +59,7 @@
 		<module>boot-devtools-dozer</module>
 	</modules> -->
   <modules>
+  	<module>boot-devtools-dfs</module>
     <module>boot-devtools-mg</module>
   </modules>
 </project>

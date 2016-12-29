@@ -1,7 +1,7 @@
 package org.boot.service.activiti.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,13 +49,31 @@ public class ActivitiServiceImpl implements ActivitiService {
 	 * @param file  在action层文件上传的内容  
 	 * @param processName  流程名称  
 	 */ 
-	public void deploy(File file,String processName) throws Exception{
-		InputStream in = new FileInputStream(file);
-		ZipInputStream zipInputStream = new ZipInputStream(in);
+	public void deploy(String processName, byte[] zipData) throws Exception{
+		InputStream inputStream = new ByteArrayInputStream(zipData);
+		ZipInputStream zipInputStream = new ZipInputStream(inputStream);
 		repositoryService
 		.createDeployment()
 		.name(processName)
 		.addZipInputStream(zipInputStream)
+		.deploy();
+	} 
+	
+	/**
+	 * 隔离部署：把文件部署fastdfs上以供后期访问的需求
+	 * @param processName  流程名称
+	 * @param pngPath	png的fastdfs的路径
+	 * @param bpmnPath  bpmn的fastdfs的路径
+	 * @param pngStream png的文件输入流
+	 * @param bpmnStream  bpmn的文件输流
+	 * @throws Exception
+	 */
+	public void isolateDeploy(String processName, String pngPath, String bpmnPath, InputStream pngStream , InputStream bpmnStream) throws Exception{
+		repositoryService
+		.createDeployment()
+		.name(processName)
+		.addInputStream(bpmnPath, bpmnStream)
+		.addInputStream(pngPath, pngStream)
 		.deploy();
 	} 
 	
@@ -112,11 +130,15 @@ public class ActivitiServiceImpl implements ActivitiService {
 	}
 	
 	/**
-	 * 查看流程图   0
+	 * 查看流程图
+	 * @throws IOException 
 	 */
-	public InputStream showImages(String pdid){
-		return repositoryService
+	public byte[] showImages(String pdid) throws IOException{
+		InputStream inputStream = repositoryService
 		.getProcessDiagram(pdid);
+		byte[] image = new byte[inputStream.available()];
+		inputStream.read(image);
+		return image;
 	}
 	
 	/**

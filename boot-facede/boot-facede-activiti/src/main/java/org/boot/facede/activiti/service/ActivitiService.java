@@ -1,6 +1,5 @@
 package org.boot.facede.activiti.service;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +20,17 @@ public interface ActivitiService {
 	 * @param file  在action层文件上传的内容
 	 * @param processName  流程名称  
 	 */ 
-	public void deploy(File file,String processName) throws Exception;
+	public void deploy(String processName, byte[] zipData) throws Exception;
+	/**
+	 * 隔离部署：把文件部署fastdfs上以供后期访问的需求
+	 * @param processName  流程名称
+	 * @param pngPath	png的fastdfs的路径
+	 * @param bpmnPath  bpmn的fastdfs的路径
+	 * @param pngStream png的文件输入流
+	 * @param bpmnStream  bpmn的文件输流
+	 * @throws Exception
+	 */
+	public void isolateDeploy(String processName, String pngPath, String bpmnPath, InputStream pngStream , InputStream bpmnStream) throws Exception;
 	
 	/**
 	 * 查询所有的部署信息
@@ -41,7 +50,7 @@ public interface ActivitiService {
 	/**
 	 * 查看流程图
 	 */
-	public InputStream showImages(String pdid) throws Exception;
+	public byte[] showImages(String pdid) throws Exception;
 	
 	/**
 	 * 启动流程实例

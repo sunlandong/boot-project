@@ -22,8 +22,8 @@ import org.csource.fastdfs.TrackerServer;
  */
 public class FastDFSClient {
 
-	//private static final String CONF_FILENAME = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "dfs/fdfs_client.conf";
-	private static final String CONF_FILENAME = "src/main/resources/dfs/fdfs_client.conf";
+	private static final String CONF_FILENAME = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "dfs/fdfs_client.conf";
+	//private static final String CONF_FILENAME = "src/main/resources/dfs/fdfs_client.conf";
 	private static StorageClient1 storageClient1 = null;
 
 	private static Logger logger = Logger.getLogger(FastDFSClient.class);

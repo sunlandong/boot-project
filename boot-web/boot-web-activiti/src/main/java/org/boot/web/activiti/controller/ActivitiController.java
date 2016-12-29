@@ -1,10 +1,19 @@
 package org.boot.web.activiti.controller;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.boot.devtools.dfs.FastDFSClient;
 import org.boot.facede.activiti.model.Application;
 import org.boot.facede.activiti.model.ApproveInfo;
 import org.boot.facede.activiti.model.ApproveInfoVo;
@@ -18,7 +27,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Controller
@@ -34,10 +45,44 @@ public class ActivitiController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/deploy",method=RequestMethod.PUT)
+	@RequestMapping(value="/deploy",method=RequestMethod.POST)
 	@ResponseBody
-	public ErrorInfo<String> deploy(HttpServletRequest request)throws Exception{
-		activitiService.deploy(new File("C:/A/E/myeclipsews/boot-project/boot-web/boot-web-activiti/src/main/resources/FirstProcess.zip"), "测试流程");
+	public ErrorInfo<String> deploy(MultipartFile file,String bpmnName,HttpServletRequest request)throws Exception{
+		activitiService.deploy(bpmnName, file.getBytes());
+		return ResultUtils.createSuccess("ok");
+	}
+	/**
+	 * 分离型流程部署  未完成
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/isolateDeploy",method=RequestMethod.PUT)
+	@ResponseBody
+	public ErrorInfo<String> isolateDeploy(@RequestParam(required = false) MultipartFile file,String bpmnName, HttpServletRequest request)throws Exception{
+		//File file = new File("C:/A/E/myeclipsews/boot-project/boot-web/boot-web-activiti/src/main/resources/FirstProcess.zip");
+		ZipInputStream zipInputStream = new ZipInputStream(file.getInputStream());
+		File tmpFile = new File("C:/A/E/myeclipsews/boot-project/boot-web/boot-web-activiti/src/main/resources/tmp" + System.currentTimeMillis() + ".zip");
+		file.transferTo(tmpFile);
+		ZipFile zipFile = new ZipFile(tmpFile);
+		InputStream pngStream = null;
+		InputStream bpmnStream = null;
+		ZipEntry zipEntry;  
+        while ((zipEntry = zipInputStream.getNextEntry()) != null) {  
+            if (zipEntry.isDirectory()) {
+            	
+            } else {  
+            	if(zipEntry.getName().endsWith("png")) {
+            		pngStream = zipFile.getInputStream(zipEntry);
+            	} else if(zipEntry.getName().endsWith("bpmn")){
+            		bpmnStream = zipFile.getInputStream(zipEntry);
+            	}
+            } 
+        }
+        //fastdfs存储文件
+        String pngPath = "";
+        String bpmnPath = "";
+		activitiService.isolateDeploy(bpmnName, pngPath, bpmnPath, pngStream, bpmnStream);
 		return ResultUtils.createSuccess("ok");
 	}
 	
@@ -51,6 +96,20 @@ public class ActivitiController {
 	public List<Map<String,Object>> getAllLastDeployment() throws Exception{
 		return activitiService.getAllLastDeployment();
 	}
+	
+	
+	@RequestMapping(value="/getProcessDiagram/{pdid}",method=RequestMethod.GET)
+	@ResponseBody
+	public void getProcessDiagram(HttpServletResponse response,@PathVariable("pdid") String pdid) throws Exception{
+		byte[] data = activitiService.showImages(pdid);
+		response.setContentType("image/png");
+        OutputStream outputStream = response.getOutputStream();
+        outputStream.write(data);
+        outputStream.flush();
+        outputStream.close();
+	}
+	
+	
 	
 	/**
 	 * 根据流程定义KEY删除流程定义
@@ -73,8 +132,8 @@ public class ActivitiController {
 	 */
 	@RequestMapping(value="/deployTemplate", method=RequestMethod.POST)
 	@ResponseBody
-	public List<Template> deployTemplate(@RequestBody Template template) throws Exception {
-		template.setVcFilePath("group1/M00/00/07/Cu4SUlhh2Z6ATGkRAAAyvhx52d008.docx");
+	public List<Template> deployTemplate(@RequestParam(required = false) MultipartFile file, Template template) throws Exception {
+		template.setVcFilePath(FastDFSClient.uploadFile(file.getBytes(), file.getOriginalFilename()));
 		template.setVcId(UUID.randomUUID().toString());
 		activitiService.saveTemplate(template);
 		return activitiService.findAllTemplate();

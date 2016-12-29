@@ -44,4 +44,23 @@
 			<version>5.5.1</version>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<classesDirectory>target/classes/</classesDirectory>
+					<archive>
+						<manifest>
+							<mainClass>org.boot.service.activiti.BootStrap</mainClass>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+							<useUniqueVersions>false</useUniqueVersions>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

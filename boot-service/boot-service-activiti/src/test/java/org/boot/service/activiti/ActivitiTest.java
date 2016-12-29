@@ -1,12 +1,7 @@
 package org.boot.service.activiti;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.activiti.engine.repository.ProcessDefinition;
 import org.boot.facede.activiti.model.Application;
 import org.boot.facede.activiti.model.Template;
 import org.boot.facede.activiti.service.ActivitiService;
@@ -26,7 +21,7 @@ public class ActivitiTest {
 	
 	@Test
 	public void deployTest() throws Exception {
-		activitiService.deploy(new File("C:/A/E/myeclipsews/boot-project/boot-service/boot-service-activiti/src/test/java/LeaveProcess.zip"), "请假流程测试");
+//		activitiService.deploy(new File("C:/A/E/myeclipsews/boot-project/boot-service/boot-service-activiti/src/test/java/LeaveProcess.zip"), "请假流程测试");
 //		activitiService.deploy(new File("C:/A/E/myeclipsews/boot-project/boot-service/boot-service-activiti/src/test/java/Money.zip"), "报销流程测试");
 	}
 	@Test
