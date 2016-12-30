@@ -9,7 +9,7 @@ import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 
 /**
- * 标记注解插件
+ * 增加注解插件
  */
 public class AnnotationPlugin extends PluginAdapter {
 	private String annotationClassName;
