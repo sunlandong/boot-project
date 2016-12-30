@@ -21,7 +21,7 @@ public class MybatisGeneratorStarter {
 		logger.info("Start generator ...");
 		List<String> warnings = new ArrayList<String>();
 		boolean overwrite = true; // 是否覆盖原来的文件
-		File configFile = new File("C:/A/E/myeclipsews/boot-project/boot-devtools/boot-devtools-mg/src/main/resources/mybatis-generator-starter.xml");
+		File configFile = new File("C:/A/boot-project/boot-devtools/boot-devtools-mg/src/main/resources/mybatis-generator-starter.xml");
 		ConfigurationParser cp = new ConfigurationParser(warnings);
 		Configuration config = cp.parseConfiguration(configFile);
 		DefaultShellCallback callback = new DefaultShellCallback(overwrite);
