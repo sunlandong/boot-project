@@ -13,11 +13,13 @@ public interface OrgService {
 	
 	JSONArray getOrgTreeData(String orgId) throws Exception;
 	
-	List<Org> getOrgListWithPage(String start, String limit, Map<String, Object> param)throws Exception;
+	List<Org> getOrgListWithPage(int start, int limit, Map<String, Object> param)throws Exception;
 	
 	void saveOrg(Org org) throws Exception;
 	
 	void updateOrg(Org org)throws Exception;
 	
-	void deleteOrg(Org org) throws Exception;
+	void deleteOrg(String id) throws Exception;
+	
+	Org getOrg(String orgid)throws Exception;
 }

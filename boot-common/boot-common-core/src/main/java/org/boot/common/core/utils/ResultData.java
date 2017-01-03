@@ -1,4 +1,4 @@
-package org.boot.web.activiti.util;
+package org.boot.common.core.utils;
 
 import java.io.Serializable;
 

@@ -14,5 +14,7 @@
 	<!-- 注册中心地址 -->
 	<dubbo:registry protocol="zookeeper" address="zookeeper://localhost:2181" />
 	
-	<!-- <dubbo:reference id="activitiService" interface="org.boot.facede.activiti.service.ActivitiService" check="false"/> -->
+	<dubbo:reference id="userService" interface="org.boot.facede.core.service.UserService" check="false"/>
+	<dubbo:reference id="orgService" interface="org.boot.facede.core.service.OrgService" check="false"/>
+	
 </beans>

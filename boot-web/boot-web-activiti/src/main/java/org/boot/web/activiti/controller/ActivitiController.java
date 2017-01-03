@@ -13,14 +13,14 @@ import java.util.zip.ZipInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.boot.common.core.utils.ErrorInfo;
+import org.boot.common.core.utils.ResultUtils;
 import org.boot.devtools.dfs.FastDFSClient;
 import org.boot.facede.activiti.model.Application;
 import org.boot.facede.activiti.model.ApproveInfo;
 import org.boot.facede.activiti.model.ApproveInfoVo;
 import org.boot.facede.activiti.model.Template;
 import org.boot.facede.activiti.service.ActivitiService;
-import org.boot.web.activiti.util.ErrorInfo;
-import org.boot.web.activiti.util.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
