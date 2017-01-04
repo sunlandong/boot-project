@@ -1,4 +1,4 @@
-package org.boot.devtools.dfs;
+/*package org.boot.devtools.dfs;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -23,9 +23,9 @@ public class FastDFSTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(FastDFSTest.class);
 
-	/**
+	*//**
 	 * spring实例注入
-	 */
+	 *//*
 //	@Autowired
 //	RiskMonitorBizBaseManager bizBaseManager;
 
@@ -63,4 +63,4 @@ public class FastDFSTest {
 		System.out.println(result == 0 ? "删除成功" : "删除失败:" + result);
 	}
 
-}
+}*/

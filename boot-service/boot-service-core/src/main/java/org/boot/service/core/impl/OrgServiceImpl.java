@@ -33,7 +33,7 @@ public class OrgServiceImpl implements OrgService{
 	public List<Org> getOrgListByParentId(String parentId) throws Exception {
 		// TODO Auto-generated method stub
 		OrgCriteria example = new OrgCriteria();
-		example.setOrderByClause(" inSortNo ");
+		//example.setOrderByClause("inSortNo");
 		Criteria criteria = example.createCriteria();
 		criteria.andVcParentIdEqualTo(parentId);
 		criteria.andVcIsDelEqualTo(SystemCons.IS.NO);
